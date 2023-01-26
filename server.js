@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors')
-
-
+const bodyParser = require('body-parser')
 
 const app = express();
 
@@ -11,20 +10,30 @@ var corOptions = {
 }
 
 
+
+//routers
+const router = require('./routes/routes.js')
+app.use('/bookings', router);
+
+
 //middlewares
 
-app.use(cors(corOptions));
+// app.use(cors(corOptions));
 
-app.use(express.json());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded());
 
-app.use(express.urlencoded({extended: true}));
+ app.use(bodyParser.json());
 
-
-
+// app.use(function (req, res) {
+//   res.setHeader('Content-Type', 'text/plain')
+//   res.write('you posted:\n')
+//   res.end(JSON.stringify(req.body, null, 2))
+// })
 
 //testing api
-app.get('/', (req, res) => {
-    res.json({message: 'you can start renting vehihcle!'})
+app.post('/healthCheck', (req, res) => {
+    res.json(req.body)
 })
 
 

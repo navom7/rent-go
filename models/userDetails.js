@@ -34,6 +34,15 @@ module.exports = function(sequelize, DataTypes) {
     sequelize,
     tableName: 'userDetails',
     schema: 'otg',
-    timestamps: false
+    timestamps: false,
+    indexes: [
+      {
+        name: "userDetails_pkey",
+        unique: true,
+        fields: [
+          { name: "userId" },
+        ]
+      },
+    ]
   });
 };
