@@ -9,27 +9,17 @@ var corOptions = {
     origin: 'https://localhost:8080'
 }
 
+// middlewares
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+app.use(cors(corOptions));
 
 
 //routers
 const router = require('./routes/routes.js')
-app.use('/bookings', router);
+app.use('', router);
 
 
-//middlewares
-
-// app.use(cors(corOptions));
-
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded());
-
- app.use(bodyParser.json());
-
-// app.use(function (req, res) {
-//   res.setHeader('Content-Type', 'text/plain')
-//   res.write('you posted:\n')
-//   res.end(JSON.stringify(req.body, null, 2))
-// })
 
 //testing api
 app.post('/healthCheck', (req, res) => {

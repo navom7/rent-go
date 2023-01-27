@@ -13,7 +13,7 @@ router.get('/getAllBookings', bookingController.getAllBookings);
 
 
 router.post('/sendOtp', mobileVerificationController.createNewOtp)
-
+router.post('/login', mobileVerificationController.verifyOtp)
 
 
 

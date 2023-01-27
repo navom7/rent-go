@@ -2,6 +2,8 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('stationDetails', {
     stationId: {
+      autoIncrement: true,
+      autoIncrementIdentity: true,
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true

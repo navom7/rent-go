@@ -3,75 +3,56 @@ const db = require('../models')
 
 
 //create main Model
-const bookingDetails = db.bookingDetails
+const mobileVerification = db.mobileVerification
 
 
 
-//create booking
+//create createOtp
 const createNewOtpService = async(req) => {
-    const newOtpDetail = await bookingDetails.create(req);
-    return newOtpDetail;
+    const newOtpDetail = await mobileVerification.create(req);
+    return newOtpDetail?.dataValues;
 }
+ 
 
-
-//get all bookings
-const getAllBookingsService = async () => {
-
-    let bookings = await bookingDetails.findAll({
-        attributes: [
-            'bookingId',
-            'userId',
-            'vehicleNumber',
-            'vehicleType'
-        ]
+//find one otpDetails
+const findOneOtpDetailsService = async (req) => {
+    let otpDetail = await mobileVerification.findOne({
+        where: req
     })
-    
-    return bookings;
+    return otpDetail?.dataValues;
 }
 
 
-//find one booking
-const findOneBookingService = async (req, res) => {
-    let bookingId = req.params.id
-    let bookings = await bookingDetails.One({
-        where: {
-            bookingId: bookingId
-        }
+
+//update verificationDetails
+const updateVerificationDetailsService = async (req, whereObj) => {
+    let verificationDetail = await bookingDetails.update(req, {
+        where: whereObj
     })
-    res.status(200).send(bookings);
+    return verificationDetail?.dataValues;
 }
 
 
 
-//update one booking by id
-const updateBookingService = async (req, res) => {
-    let bookingId = req.params.id
-    let updateBooking = await bookingDetails.update(req.body, {
-        where: {
-            bookingId: bookingId
-        }
-    })
-    res.status(200).send(updateBooking);
-}
 
 
-//delete booking by Id
 
-const deleteBookingService = async (req, res) => {
-    let bookingId = req.params.id
-    let deletedBooking = await bookingDetails.destroy({
-        where: {
-            bookingId: bookingId
-        }
-    })
-    res.status(200).send('booking deleted!');
-}
+// //delete booking by Id
+// const deleteBookingService = async (req, res) => {
+//     let bookingId = req.params.id
+//     let deletedBooking = await bookingDetails.destroy({
+//         where: {
+//             bookingId: bookingId
+//         }
+//     })
+//     res.status(200).send('booking deleted!');
+// }
 
 
 module.exports = {
     createNewOtpService,
-    getAllBookingsService,
-    updateBookingService,
-    deleteBookingService,
-    findOneBookingService
+    findOneOtpDetailsService,
+    updateVerificationDetailsService
+    
+    // deleteBookingService
 }
