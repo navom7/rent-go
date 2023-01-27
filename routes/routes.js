@@ -1,5 +1,5 @@
 const bookingController = require('../controllers/bookingController.js')
-const mobileVerificationController = require('../controllers/mobileVerificationController.js')
+const mobileVerificationController = require('../controllers/loginController.js')
 
 const router = require('express').Router();
 
@@ -14,7 +14,7 @@ router.get('/getAllBookings', bookingController.getAllBookings);
 
 router.post('/sendOtp', mobileVerificationController.createNewOtp)
 router.post('/login', mobileVerificationController.verifyOtp)
-
+router.post('/signup', mobileVerificationController.createUser)
 
 
 

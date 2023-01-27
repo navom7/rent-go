@@ -1,10 +1,10 @@
 const db = require('../models')
-
+const _ = require('lodash')
 
 
 //create main Model
 const mobileVerification = db.mobileVerification
-
+const userDetails = db.userDetails
 
 
 //create createOtp
@@ -26,10 +26,27 @@ const findOneOtpDetailsService = async (req) => {
 
 //update verificationDetails
 const updateVerificationDetailsService = async (req, whereObj) => {
-    let verificationDetail = await bookingDetails.update(req, {
+    let verificationDetail = await mobileVerification.update(req, {
         where: whereObj
     })
-    return verificationDetail?.dataValues;
+    return !verificationDetail && _.find(verificationDetail, x => x != 0);
+}
+
+
+
+//create new User
+const createNewUserService = async(req) => {
+    const response = await userDetails.create(req);
+    return response?.dataValues;
+}
+
+
+//find one user details
+const findUserDetailsService = async (req) => {
+    let otpDetail = await userDetails.findOne({
+        where: req
+    })
+    return otpDetail?.dataValues;
 }
 
 
@@ -52,7 +69,8 @@ const updateVerificationDetailsService = async (req, whereObj) => {
 module.exports = {
     createNewOtpService,
     findOneOtpDetailsService,
-    updateVerificationDetailsService
-    
+    updateVerificationDetailsService,
+    createNewUserService,
+    findUserDetailsService
     // deleteBookingService
 }
