@@ -1,28 +1,40 @@
-const db = require('../models')
+const dbModels = require('../models')
 const _ = require('lodash')
-const helperFunctions = require('../helper/helperFunctions.js')
 
 
 //create main Model
-const mobileVerification = db.mobileVerification
-const userDetails = db.userDetails
+const vehicleDetails = dbModels.vehicleDetails
+const stationDetails = dbModels.stationDetails
 
 
-//create createOtp
-const createNewOtpService = async(req, DB) => {
-    let database = await helperFunctions.findDatabase(DB);
-    const newOtpDetail = await database.create(req);
-    return newOtpDetail?.dataValues;
+//create new vehicle
+const createNewEntryIntoDBService = async(reqBody, selectedDb) => {
+    const response = await dbModels.selectedDb.create(req);
+    return response?.dataValues;
+}
+
+//create new station
+const createNewStationService = async(req) => {
+    const response = await stationDetails.create(req);
+    return response?.dataValues;
 }
  
 
-//find one otpDetails
-const findOneOtpDetailsService = async (req) => {
-    let otpDetail = await mobileVerification.findOne({
+//find one vehicle details
+const findOneVehicleDetailsService = async (req) => {
+    let response = await vehicleDetails.findOne({
         where: req
     })
-    return otpDetail?.dataValues;
+    return response?.dataValues;
 }
+
+// //find one vehicle details
+// const findOneVehicleDetailsService = async (req) => {
+//     let response = await vehicleDetails.findOne({
+//         where: req
+//     })
+//     return response?.dataValues;
+// }
 
 
 
@@ -70,8 +82,9 @@ const findUserDetailsService = async (req) => {
 
 
 module.exports = {
-    createNewOtpService,
-    findOneOtpDetailsService,
+    createNewEntryIntoDBService,
+    createNewStationService,
+
     updateVerificationDetailsService,
     createNewUserService,
     findUserDetailsService

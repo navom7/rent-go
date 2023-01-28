@@ -13,8 +13,9 @@ router.get('/getAllBookings', bookingController.getAllBookings);
 
 
 router.post('/sendOtp', mobileVerificationController.createNewOtp)
-router.post('/login', mobileVerificationController.verifyOtp)
+router.post('/login', mobileVerificationController.login)
 router.post('/signup', mobileVerificationController.createUser)
+router.post('/userdetails', mobileVerificationController.findUserDetails)
 
 
 

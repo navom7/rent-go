@@ -1,17 +1,7 @@
 const db = require('../models')
 const moment = require('moment')
 
-const {
-    createNewOtpService,
-    findOneOtpDetailsService,
-    updateVerificationDetailsService,
-    createNewUserService,
-    findUserDetailsService
- } = require('../service/loginService.js')
-
-//create main Model
-const bookingDetails = db.bookingDetails
-
+const loginService = require('../service/loginService.js')
 
 
 //create booking
@@ -25,7 +15,7 @@ const createNewOtp = async(req, res) => {
         createdOn: moment().format()
     }
 
-    const newOtpResponse = await createNewOtpService(newOtpRequest, 'mobileVerification');
+    const newOtpResponse = await loginService.createNewOtpService(newOtpRequest, 'mobileVerification');
     if(!newOtpResponse || !newOtpResponse.verificationId)
     {  
         res.status(500).send({isSuccess: true, message: "There is some issue with the server at this point of time, please try again!"})
@@ -43,7 +33,7 @@ const login = async (req, res) => {
         // isVerified: false,
         otp: req.body.otp
     }
-    let verifyOtpResponse = await findOneOtpDetailsService(verifyOtpRequest)
+    let verifyOtpResponse = await loginService.findOneOtpDetailsService(verifyOtpRequest)
     if(!verifyOtpResponse || !verifyOtpResponse.verificationId)
     {  
         res.status(500).send({isSuccess: false, message: "Incorrect OTP!"})
@@ -56,7 +46,7 @@ const login = async (req, res) => {
         let whereObje = {
             verificationId: verifyOtpResponse.verificationId
         }
-        let deactivateOtp = await updateVerificationDetailsService(updateRequestBody, whereObje)
+        let deactivateOtp = await loginService.updateVerificationDetailsService(updateRequestBody, whereObje)
         if(!deactivateOtp){
             res.status(500).send({isSuccess: false, message:"There is some issue, please try after sometime!"})
         }
@@ -64,7 +54,7 @@ const login = async (req, res) => {
             let findUserDetailsRequest = {
                 mobileNumber: req.body.mobileNumber
             }
-            let userDetailsResponse = await findUserDetailsService(findUserDetailsRequest)
+            let userDetailsResponse = await loginService.findUserDetailsService(findUserDetailsRequest)
             if(!userDetailsResponse || !userDetailsResponse.userId){
                 res.status(200).send({isSuccess: true, userPresent: false, message: "Mobile number verified, please create the user account."})
             } else {
@@ -89,7 +79,7 @@ const updateVerificationDetails = async (req, res) => {
     let whereObje = {
 
     }
-    let updateBooking = await updateVerificationDetailsService(updateRequestBody, whereObje)
+    let updateBooking = await loginService.updateVerificationDetailsService(updateRequestBody, whereObje)
     res.status(200).send(updateBooking);
 }
 
@@ -109,14 +99,14 @@ const createUser = async(req, res) => {
     let verifyOtpRequest = {
         mobileNumber: req.body.mobileNumber
     }
-    let verifyOtpResponse = await findOneOtpDetailsService(verifyOtpRequest)
+    let verifyOtpResponse = await loginService.findOneOtpDetailsService(verifyOtpRequest)
     if(!verifyOtpResponse || !verifyOtpResponse.isVerified) {
         res.status(200).send({isSuccess: false, message: "Mobile number not verified, Please verify first!"})
     }
     let findUserDetailsRequest = {
         mobileNumber: req.body.mobileNumber
     }
-    let userDetailsResponse = await findUserDetailsService(findUserDetailsRequest)
+    let userDetailsResponse = await loginService.findUserDetailsService(findUserDetailsRequest)
     if(userDetailsResponse || userDetailsResponse.userId)
     {  
         res.status(200).send({
@@ -125,7 +115,7 @@ const createUser = async(req, res) => {
             userDetails: userDetailsResponse
         })
     }
-    const createNewUserResponse = await createNewUserService(reqBody);
+    const createNewUserResponse = await loginService.createNewUserService(reqBody);
     
     if(!createNewUserResponse || !createNewUserResponse.userId)
     {  
@@ -141,7 +131,7 @@ const findUserDetails = async (req, res) => {
     let findUserDetailsRequest = {
         mobileNumber: req.body.mobileNumber
     }
-    let userDetailsResponse = await findUserDetailsService(findUserDetailsRequest)
+    let userDetailsResponse = await loginService.findUserDetailsService(findUserDetailsRequest)
     if(!userDetailsResponse || !userDetailsResponse.userId)
     {  
         res.status(200).send({isSuccess: false, message: "Internal Server Error!"})
